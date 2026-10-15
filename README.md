@@ -24,5 +24,4 @@ Read [WORKFLOW.md](docs/WORKFLOW.md) for the stage order and [EXTERNAL_INPUTS.md
 The preparation scripts provide a direct path from source snRNA data to inputs for all 36 independent models; see [WORKFLOW.md](docs/WORKFLOW.md). Other scripts largely preserve the source code and may retain absolute paths to the original cluster directories, so a reader must configure input and output paths for their own data layout before rerunning. [PATH_AUDIT.md](docs/PATH_AUDIT.md) identifies code that still mentions historical `AD_REGA` locations. This is a code release, not a one-command executable workflow. No jobs are submitted by this repository.
 
 ## Citation
-
-When the repository is published, cite the associated manuscript and the repository's archived release DOI or commit hash. Add the manuscript citation, repository URL, authors, and release identifier before public release; they are not yet supplied here.
+NA
