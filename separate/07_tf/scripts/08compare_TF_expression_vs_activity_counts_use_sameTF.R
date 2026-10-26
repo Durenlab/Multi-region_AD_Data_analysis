@@ -1,4 +1,6 @@
 #!/usr/bin/env Rscript
+rega_separate_root <- Sys.getenv("REGA_SEPARATE_ROOT")
+if (!nzchar(rega_separate_root)) stop("Set REGA_SEPARATE_ROOT")
 
 # ============================================================
 # Compare TF expression vs TF activity for pathology association
@@ -32,13 +34,13 @@ suppressPackageStartupMessages({
 # 1. User settings
 # ------------------------------------------------------------
 
-tf_root <- "/project/zduren/durenlab/naqing_palmetto/REGA_separate/07_tf/results/activity/"
+tf_root <- file.path(rega_separate_root, "07_tf/results/activity/")
 
-metadata_dir <- "/project/zduren/durenlab/naqing_palmetto/REGA_separate/01_prepare/data/metadata_by_group"
+metadata_dir <- file.path(rega_separate_root, "01_prepare/data/metadata_by_group")
 
 output_dir <- Sys.getenv(
   "REGA_TF_COMPARISON_OUTPUT_DIR",
-  unset = "/project/zduren/durenlab/naqing_palmetto/REGA_separate/07_tf/results/expression_activity_counts_same_tf"
+  unset = file.path(rega_separate_root, "07_tf/results/expression_activity_counts_same_tf")
 )
 
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)

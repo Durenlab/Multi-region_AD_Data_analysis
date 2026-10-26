@@ -1,11 +1,12 @@
 #!/bin/bash
+: "${REGA_SEPARATE_ROOT:?Set REGA_SEPARATE_ROOT}"
 set -euo pipefail
 
-ldsc_dir="/project/zduren/durenlab/naqing_palmetto/REGA_separate/04_ldsc/"
+ldsc_dir="${REGA_SEPARATE_ROOT}/04_ldsc/"
 ctm_file="${REGA_LDSC_MODULE_FILE:-${ldsc_dir}/inputs/selected_modules.txt}"
 
-PHASE3_DIR="/project/zduren/durenlab/palmetto/cham/GWAS/1000G_Phase3"
-LDSC_PATH="/project/zduren/durenlab/palmetto/cham/GWAS/ldsc"
+PHASE3_DIR="${LDSC_PHASE3_DIR:?Set LDSC_PHASE3_DIR}"
+LDSC_PATH="${LDSC_CODE_DIR:?Set LDSC_CODE_DIR}"
 PLINK_DIR="${PHASE3_DIR}/1000G_EUR_Phase3_plink"
 PRINT_SNP="${PHASE3_DIR}/list.txt"
 

@@ -1,4 +1,6 @@
 #!/usr/bin/env Rscript
+rega_separate_root <- Sys.getenv("REGA_SEPARATE_ROOT")
+if (!nzchar(rega_separate_root)) stop("Set REGA_SEPARATE_ROOT")
 
 suppressPackageStartupMessages({
   library(dplyr)
@@ -12,7 +14,7 @@ suppressPackageStartupMessages({
 # Config
 # ============================================================
 
-BASE_DIR <- "/project/zduren/durenlab/naqing_palmetto/REGA_separate/"
+BASE_DIR <- file.path(rega_separate_root, "")
 
 
 

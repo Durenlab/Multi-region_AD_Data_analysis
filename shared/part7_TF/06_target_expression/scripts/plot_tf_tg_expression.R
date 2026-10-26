@@ -10,24 +10,27 @@ suppressPackageStartupMessages({
 
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) < 2L || length(args) > 4L) {
-  stop("Usage: plot_tf_tg_expression.R <celltype_region> <EXP008_results-root> [celltype_specific|cross_celltype] [TF|ALL]")
+  stop("Usage: plot_tf_tg_expression.R <celltype_region> <results-root> [celltype_specific|cross_celltype] [TF|ALL]")
 }
 pair <- args[[1]]
 out_root <- args[[2]]
 universe <- if (length(args) >= 3L) args[[3]] else "celltype_specific"
 tf_selector <- if (length(args) >= 4L) args[[4]] else "ALL"
 if (!universe %in% c("celltype_specific", "cross_celltype")) stop("Unknown analysis universe: ", universe)
-adrega <- Sys.getenv("REGA_SEPARATE_ROOT", unset = "/project/zduren/durenlab/naqing_palmetto/REGA_separate")
-shared_root <- Sys.getenv("REGA_SHARED_ROOT", unset = normalizePath(file.path(dirname(sub("^--file=", "", grep("^--file=", commandArgs(FALSE), value = TRUE)[1])), "../../..")))
+script_file <- sub("^--file=", "", grep("^--file=", commandArgs(FALSE), value = TRUE)[1])
+release_root <- normalizePath(file.path(dirname(script_file), "../../../.."), mustWork = TRUE)
+data_root <- Sys.getenv("REGA_DATA_ROOT", unset = dirname(dirname(release_root)))
+adrega <- Sys.getenv("REGA_SEPARATE_ROOT", unset = file.path(data_root, "REGA_separate"))
+shared_root <- Sys.getenv("REGA_SHARED_ROOT", unset = file.path(data_root, "REGA_shared"))
 adrega_cross <- shared_root
 driver_file <- if (universe == "celltype_specific") {
   file.path(adrega, "07_tf/results/activity_pathology/all_celltype_region_TF_pathology_association.tsv")
 } else {
-  file.path(adrega_cross, "part7_TF/04DriverTF_lm/all_celltype_region_TF_pathology_association.tsv")
+  file.path(adrega_cross, "part7_TF/04TF_pathology/all_celltype_region_TF_pathology_association.tsv")
 }
-grn_dir <- Sys.getenv("REGA_SEPARATE_GRN_ROOT", unset = "")
+grn_dir <- Sys.getenv("SINGLE_GRN_ROOT", unset = Sys.getenv("REGA_SEPARATE_GRN_ROOT", unset = ""))
 if (universe == "celltype_specific" && !nzchar(grn_dir)) {
-  stop("Set REGA_SEPARATE_GRN_ROOT to GRNs derived from the current independent-model matrices")
+  stop("Set SINGLE_GRN_ROOT to the GRNs used for the independent-model target analysis")
 }
 if (universe == "celltype_specific") {
   gex_file <- file.path(adrega, "01_prepare/data/cleaned_expression", paste0("cleaned_", pair, ".tsv"))
@@ -41,15 +44,16 @@ if (universe == "celltype_specific") {
 } else {
   gex_file <- file.path(adrega_cross, "part1_prepare_REGA/02cleaned_region_consistent_gex", paste0("cleaned_", pair, "_region_consistent.tsv"))
   region <- sub("^.*_", "", pair)
-  gene_module_file <- file.path(adrega_cross, "part3_process_REGA_output/10-1gene_module_assignment_region_shareH_FC", region, paste0(region, "_ALL_cellgene_FC_assignment_with_unassigned.tsv"))
-  tf_module_file <- file.path(adrega_cross, "part7_TF/02tf_assignment_FC", region, paste0(region, "_ALL_cell_TF_FC_assignment_with_unassigned.tsv"))
-  grn_file <- file.path(shared_root, "part7_TF/05GRN/results", paste0(pair, "_TG_TF.rds"))
+  gene_module_file <- file.path(adrega_cross, "part3_process_REGA_output/10-1gene_module_assignment_region_shareH_FC_no_Vasc", region, paste0(region, "_ALL_cellgene_FC_assignment_with_unassigned.tsv"))
+  tf_module_file <- file.path(adrega_cross, "part7_TF/02tf_assignment", region, paste0(region, "_ALL_cell_TF_FC_assignment_with_unassigned.tsv"))
+  grn_file <- file.path(Sys.getenv("SHARED_GRN_ROOT", unset = file.path(shared_root, "part7_TF", "05GRN", "results")), paste0(pair, "_TG_TF.rds"))
   assignment_entity <- "gene"
   assignment_pair_column <- "celltype_region"
   tf_assignment_entity <- "tf"
   module_source_label <- "region-wise TF assignment for the TF; region-wise gene assignment for targets"
 }
-pathology_file <- Sys.getenv("INDIVIDUAL_PATHOLOGY_FILE", unset = "/project/zduren/durenlab/naqing_palmetto/AD_Driver_TF/individual_pathology.tsv")
+driver_root <- Sys.getenv("AD_DRIVER_TF_ROOT", unset = file.path(data_root, "AD_Driver_TF"))
+pathology_file <- Sys.getenv("AD_PATHOLOGY_FILE", unset = file.path(driver_root, "individual_pathology.tsv"))
 pathology_levels <- c("nonAD", "earlyAD", "lateAD")
 pathology_colors <- c(nonAD = "#66AABB", earlyAD = "#EEAA55", lateAD = "#CC6677")
 test_alternative <- "greater"

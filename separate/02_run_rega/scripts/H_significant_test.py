@@ -13,7 +13,7 @@ import statsmodels.api as sm
 # Paths
 # ============================================================
 
-BASE_DIR = "/project/zduren/durenlab/naqing_palmetto/REGA_separate/"
+BASE_DIR = (os.environ["REGA_SEPARATE_ROOT"] + '/')
 # Model outputs and matching donor metadata.
 INPUT_DIR = os.environ.get("REGA_STAGE2_ROOT", os.path.join(BASE_DIR, "02_run_rega/rega_output"))
 META_DIR = os.environ.get("REGA_METADATA_ROOT", os.path.join(BASE_DIR, "01_prepare/data/metadata_by_group"))

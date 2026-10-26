@@ -8,7 +8,7 @@
 4. `04_ldsc/scripts`: prepare selected-module peak annotations, LD scores, and AD heritability enrichment.
 5. `05_gsea/scripts` and `05_gsea/figures`: GO Biological Process and KEGG enrichment and summaries.
 6. `06_magma/scripts`: GWAS gene-level analysis used for TF genetic evidence.
-7. `07_tf/scripts` and `07_tf/figures`: TF activity, TF pathology associations, module assignment in candidate contexts, expression/activity comparisons, classification, inferred GRNs, and figures. Activity and expression pathology comparisons cover all 36 contexts; lack of a candidate module does not remove a context from those comparisons.
+7. `07_tf/scripts`: TF activity, TF pathology associations, module assignment in candidate contexts, expression/activity comparisons, classification, and inferred GRNs. These scripts also produce the full context-wise classifier plots. The selected OPC_AG ROC panel, TF-count presentation, and overall-classifier panel are in `manuscript_analysis/tf_comparison`. Activity and expression pathology comparisons cover all 36 contexts; lack of a candidate module does not remove a context from those comparisons.
 
 The preparation commands below use `PREP_DIR` as the output directory and a source snRNA AnnData supplied by the user:
 
@@ -35,10 +35,10 @@ Rscript separate/01_prepare/scripts/06prepare_REGA_inputs.r PREP_DIR
 5. `part5_gsea`: run GO/KEGG enrichment and aggregate positive hits for the current modules.
 6. `part6_Age_related`: compare module gene rankings with healthy-aging signatures.
 7. `part7_TF`: infer TF activity, assign TFs, test pathology, and reconstruct regulatory networks.
-8. `part8_cellchat`: infer donor-level ligand–receptor scores, test pathology association, and generate communication figures.
+8. `part8_cellchat`: from a study-harmonized raw-count H5AD, prepare six regional inputs containing seven cell classes (including Vasc), define a pathology-blind ligand–receptor candidate set, infer donor-level scores, fit only the ordered-pathology linear model with HC3 standard errors, and generate tables and figures. The manuscript display focuses on six nonvascular classes while the analysis tables retain Vasc. See [`part8_cellchat/README.md`](../shared/part8_cellchat/README.md). No pooled pathology comparison, Spearman test, or pairwise pathology test belongs to the final inferential workflow.
 
 The shared preparation scripts use the independent-model RNA matrices and align donors within each region before constructing regional model inputs.
 
 ## Manuscript integration (`manuscript_analysis/`)
 
-The `experiments/exp004` scripts integrate module evidence across branches. Other included scripts build current Supplementary Tables 1–5, MAGMA TF flags, SPP1/GRN and target-expression summaries, final CellChat figures, and TF comparison figures. Output tables and figures are intentionally absent.
+[manuscript_analysis/README.md](../manuscript_analysis/README.md) lists the paper-facing analyses and their inputs in manuscript order. The two-step `spi1_target_expression` workflow tests module-restricted Oli_EC targets and then plots SPI1 for Figure 4i and Supplementary Figure 6d. `spp1_grn_overlap` supports Supplementary Table 7. `tf_comparison` contains the TF activity-versus-expression panels, including a focused OPC_AG ROC notebook; the context-wise fitting script already generates the full PR and ROC summaries. `module_tables` and `driver_tfs` assemble the reported supplementary tables and TF-module figures. Output tables and figures are intentionally absent.

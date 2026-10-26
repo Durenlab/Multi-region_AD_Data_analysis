@@ -3,8 +3,8 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=500G
 #SBATCH --time=48:00:00
-#SBATCH --output=logs/input1.out
-#SBATCH --error=logs/input1.err
+#SBATCH --output=%x_%j.out
+#SBATCH --error=%x_%j.err
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "${SCRIPT_DIR}"

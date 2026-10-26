@@ -9,13 +9,13 @@ from matplotlib.patches import Patch
 # ============================================================
 # Paths
 # ============================================================
-magma_file = "/project/zduren/durenlab/naqing_palmetto/REGA_separate/06_magma/results/merged/AD_Bellenguez_hg19_merged.genes.out"
+magma_file = (os.environ["REGA_SEPARATE_ROOT"] + '/06_magma/results/merged/AD_Bellenguez_hg19_merged.genes.out')
 
-motif_tf_file = "/project/zduren/durenlab/naqing_palmetto/REGA_separate/07_tf/data/motif_by_TF_matrix.tsv"
+motif_tf_file = (os.environ["REGA_SEPARATE_ROOT"] + '/07_tf/data/motif_by_TF_matrix.tsv')
 
-driver_file = "/project/zduren/durenlab/naqing_palmetto/REGA_separate/07_tf/results/activity_pathology/all_celltype_region_TF_pathology_association.tsv"
+driver_file = (os.environ["REGA_SEPARATE_ROOT"] + '/07_tf/results/activity_pathology/all_celltype_region_TF_pathology_association.tsv')
 
-outdir = "/project/zduren/durenlab/naqing_palmetto/REGA_separate/07_tf/results/tf_snp_overlap"
+outdir = (os.environ["REGA_SEPARATE_ROOT"] + '/07_tf/results/tf_snp_overlap')
 
 os.makedirs(outdir, exist_ok=True)
 

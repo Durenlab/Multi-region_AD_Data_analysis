@@ -1,7 +1,8 @@
 #!/bin/bash
+: "${REGA_SEPARATE_ROOT:?Set REGA_SEPARATE_ROOT}"
 set -euo pipefail
 
-ldsc_dir="/project/zduren/durenlab/naqing_palmetto/REGA_separate/04_ldsc"
+ldsc_dir="${REGA_SEPARATE_ROOT}/04_ldsc"
 
 ctm_file="${REGA_LDSC_MODULE_FILE:-${ldsc_dir}/inputs/selected_modules.txt}"
 peak_dir="${REGA_LDSC_EXTENDED_ROOT:-${ldsc_dir}/data/extended_peaks/extend_bed}"

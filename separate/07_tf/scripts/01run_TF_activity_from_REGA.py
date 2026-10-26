@@ -14,17 +14,17 @@ import pandas as pd
 
 REGA_ROOT = os.environ.get(
     "REGA_MATRICES_ROOT",
-    "/project/zduren/durenlab/naqing_palmetto/REGA_separate/03_process_rega/matrices",
+    (os.environ["REGA_SEPARATE_ROOT"] + '/03_process_rega/matrices'),
 )
 
 GEX_ROOT = os.environ.get(
     "REGA_INPUTS_ROOT",
-    "/project/zduren/durenlab/naqing_palmetto/REGA_separate/01_prepare/data/rega_inputs",
+    (os.environ["REGA_SEPARATE_ROOT"] + '/01_prepare/data/rega_inputs'),
 )
 
-MOTIF_TF_FILE = (
-    "/project/zduren/durenlab/naqing_palmetto/REGA_separate/"
-    "07_tf/data/Motif_TF_name_correspondance_uppercase.txt"
+MOTIF_TF_FILE = os.path.join(
+    os.environ["REGA_SEPARATE_ROOT"],
+    "07_tf/data/Motif_TF_name_correspondance_uppercase.txt",
 )
 
 OUT_SUBDIR = "TF_activity_pcc_pos_only"
@@ -419,7 +419,7 @@ def run_one(celltype, region, out_dir_cell, motif_tf):
     # ------------------------------------------------------------
     out_dir = os.environ.get(
         "REGA_TF_ACTIVITY_ROOT",
-        "/project/zduren/durenlab/naqing_palmetto/REGA_separate/07_tf/results/activity",
+        (os.environ["REGA_SEPARATE_ROOT"] + '/07_tf/results/activity'),
     )
     os.makedirs(out_dir, exist_ok=True)
 

@@ -1,15 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+: "${REGA_SEPARATE_ROOT:?Set REGA_SEPARATE_ROOT}"
+: "${MAGMA_OUTPUT_ROOT:?Set MAGMA_OUTPUT_ROOT to a new output directory}"
+: "${AD_GWAS_GRCH38_FILE:?Set AD_GWAS_GRCH38_FILE}"
+: "${MAGMA_GENE_LOC:?Set MAGMA_GENE_LOC}"
+: "${LDSC_CHAIN_FILE:?Set LDSC_CHAIN_FILE}"
+: "${LDSC_BIM_DIR:?Set LDSC_BIM_DIR}"
+[[ ! -e "$MAGMA_OUTPUT_ROOT" ]] || { echo "MAGMA_OUTPUT_ROOT already exists; choose a fresh directory" >&2; exit 1; }
+command -v CrossMap >/dev/null || { echo "CrossMap must be available on PATH" >&2; exit 1; }
+magma="${MAGMA_BIN:-${REGA_SEPARATE_ROOT}/external_inputs/magma}"
+[[ -x "$magma" ]] || { echo "MAGMA executable missing: $magma" >&2; exit 1; }
 # step1 prepare MAGMA input GWAS file (hg19, autochromasome)
-cd /project/zduren/durenlab/naqing_palmetto/REGA_separate/06_magma
 #############################################################################################
 ################################ 00 Lift the GWAS data to hg19 ##############################
 #############################################################################################
-mkdir -p gwas/liftover_hg19
-gwas38="/project/zduren/durenlab/naqing_palmetto/REGA_separate/external_inputs/AD_GWAS_file/Bellenguez_2022/GCST90027158_buildGRCh38.tsv.gz"
-outdir="/project/zduren/durenlab/naqing_palmetto/REGA_separate/06_magma/data/gwas/liftover_hg19"
+outdir="${MAGMA_OUTPUT_ROOT}/data/gwas/liftover_hg19"
+mkdir -p "$outdir"
+gwas38="$AD_GWAS_GRCH38_FILE"
 
-source activate crossmap_env
-
-chain_file="/project/zduren/durenlab/palmetto/cham/util_data/position_mapping_hg/hg38ToHg19.over.chain.gz"
+chain_file="${LDSC_CHAIN_FILE:?Set LDSC_CHAIN_FILE}"
 
 ls -lh "$chain_file"
 
@@ -36,12 +45,12 @@ $snp!="NA" && $snp!="." && $p!="NA" && $p>0 && $p<=1 && $chr!="X" && $chr!="Y" &
 head "$outdir/AD_Bellenguez_GRCh38.for_liftover.bed"
 wc -l "$outdir/AD_Bellenguez_GRCh38.for_liftover.bed"
 
-run crossmap
+# Lift GWAS positions to hg19.
 CrossMap bed "$chain_file" \
  "$outdir/AD_Bellenguez_GRCh38.for_liftover.bed" \
  "$outdir/AD_Bellenguez_GRCh38_to_hg19.crossmap.bed"
   
-check lifted output
+# Inspect the lifted output.
 head "$outdir/AD_Bellenguez_GRCh38_to_hg19.crossmap.bed"
 wc -l "$outdir/AD_Bellenguez_GRCh38_to_hg19.crossmap.bed"
 
@@ -85,7 +94,6 @@ END{
 head "$outdir/AD_Bellenguez_hg19_MAGMA_input.dedup.tsv"
 wc -l "$outdir/AD_Bellenguez_hg19_MAGMA_input.tsv"
 wc -l "$outdir/AD_Bellenguez_hg19_MAGMA_input.dedup.tsv"
-21028392 AD_Bellenguez_hg19_MAGMA_input.dedup.tsv
 cut -f2 "$outdir/AD_Bellenguez_hg19_MAGMA_input.dedup.tsv" | tail -n +2 | sort -n | uniq -c
 
 #step 4 only autosome 
@@ -102,23 +110,14 @@ $2 ~ /^[0-9]+$/ && $2 >= 1 && $2 <= 22 {
 #############################################################################################
 ############################# 01 chromosome-wise annotation input ###########################
 #############################################################################################
-# set path
-cd /project/zduren/durenlab/naqing_palmetto/REGA_separate/06_magma/
+# Use the lifted GWAS file and supplied protein-coding gene coordinates.
+gwas_hg19="${outdir}/AD_Bellenguez_hg19_MAGMA_input.dedup.autosome.tsv"
+gene_loc="$MAGMA_GENE_LOC"
 
-# magma_dir="/project/zduren/durenlab/palmetto/cham/Heroin/Final/MAGMA_analysis"
-## cham file:/project/zduren/durenlab/palmetto/cham/Heroin/Final/MAGMA_analysis/protein_Gene.bed
-magma_dir="/project/zduren/durenlab/naqing_palmetto/REGA_separate/06_magma/"
-magma="${magma_dir}/software/magma"
-gwas_hg19="${magma_dir}/00gwas/liftover_hg19/AD_Bellenguez_hg19_MAGMA_input.dedup.autosome.tsv"
-gene_loc="${magma_dir}/hg19_protein_coding_genes.loc"
+ref_dir="${LDSC_BIM_DIR:?Set LDSC_BIM_DIR}"
 
-ref_dir="/project/zduren/durenlab/palmetto/cham/GWAS/1000G_Phase3/1000G_EUR_Phase3_plink"
-
-magma_input_dir="/project/zduren/durenlab/naqing_palmetto/REGA_separate/06_magma/data/annotation_input"
-magma_output_dir="/project/zduren/durenlab/naqing_palmetto/REGA_separate/06_magma/results/chromosome"
-
-rm -rf "$magma_input_dir"
-rm -rf "$magma_output_dir"
+magma_input_dir="${MAGMA_OUTPUT_ROOT}/data/annotation_input"
+magma_output_dir="${MAGMA_OUTPUT_ROOT}/results/chromosome"
 
 mkdir -p "$magma_input_dir"
 mkdir -p "$magma_output_dir"
@@ -210,12 +209,7 @@ done
 ###################### 03 merge chromosome-wise gene-based analysis results #################
 #############################################################################################
 
-magma_dir="/project/zduren/durenlab/palmetto/cham/Heroin/Final/MAGMA_analysis"
-magma="/project/zduren/durenlab/naqing_palmetto/REGA_separate/external_inputs/magma"
-
-magma_output_dir="/project/zduren/durenlab/naqing_palmetto/REGA_separate/06_magma/results/chromosome"
-magma_merged_output_dir="/project/zduren/durenlab/naqing_palmetto/REGA_separate/06_magma/results/merged"
-rm -rf "$magma_merged_output_dir"
+magma_merged_output_dir="${MAGMA_OUTPUT_ROOT}/results/merged"
 mkdir -p "$magma_merged_output_dir"
 
 #Create comma-separated input lists:

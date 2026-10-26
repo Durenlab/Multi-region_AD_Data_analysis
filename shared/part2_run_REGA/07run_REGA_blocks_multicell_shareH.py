@@ -4,7 +4,7 @@ import os
 SHARED_ROOT = Path(os.environ["REGA_SHARED_ROOT"]) if "REGA_SHARED_ROOT" in os.environ else next(
     p for p in Path(__file__).resolve().parents if p.name in {"REGA_shared", "shared"}
 )
-SEPARATE_ROOT = Path(os.environ.get("REGA_SEPARATE_ROOT", "/project/zduren/durenlab/naqing_palmetto/REGA_separate"))
+SEPARATE_ROOT = Path(os.environ["REGA_SEPARATE_ROOT"])
 # -*- coding: utf-8 -*-
 
 import os, glob, time, contextlib, argparse

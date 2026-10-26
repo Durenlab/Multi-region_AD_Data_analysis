@@ -1,7 +1,7 @@
 #!/bin/bash
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REGA_SHARED_ROOT="${REGA_SHARED_ROOT:-$(dirname "$(dirname "${SCRIPT_DIR}")")}"
-REGA_SEPARATE_ROOT="${REGA_SEPARATE_ROOT:-/project/zduren/durenlab/naqing_palmetto/REGA_separate}"
+REGA_SEPARATE_ROOT="${REGA_SEPARATE_ROOT:?Set REGA_SEPARATE_ROOT}"
 set -euo pipefail
 
 ldsc_dir="${REGA_SHARED_ROOT}/part4_ldsc"

@@ -1,5 +1,6 @@
 """Create the significant-region CellChat Panel C dot-and-whisker plot."""
 from pathlib import Path
+import os
 
 import matplotlib
 matplotlib.use("Agg")
@@ -8,12 +9,12 @@ import numpy as np
 import pandas as pd
 
 
-REGIONS = ["AG", "EC", "MTC", "TH"]
+REGIONS = ["AG", "EC", "HC", "MTC", "PFC", "TH"]
 
 
 def find_project_root(start=None):
-    """Return the curated CellChat root."""
-    return Path(__file__).resolve().parents[3]
+    """Return the external CellChat working directory."""
+    return Path(start) if start is not None else Path(os.environ["CELLCHAT_WORK_DIR"])
 
 
 def load_significant_results(project_root=None, regions=REGIONS):
@@ -134,3 +135,17 @@ def save_plot_table(results, output_dir):
     path = output_dir / "figure2_style_all_regions_panel_C_dotplot_table.tsv"
     results[available].to_csv(path, sep="\t", index=False)
     return path
+
+
+def main():
+    root = find_project_root()
+    results = load_significant_results(root)
+    output_dir = root / "finalized" / "figures" / "region_significant_LR"
+    for region in REGIONS:
+        if results.region.eq(region).any():
+            plot_dot_whisker(results, output_dir, region=region)
+    save_plot_table(results, output_dir)
+
+
+if __name__ == "__main__":
+    main()

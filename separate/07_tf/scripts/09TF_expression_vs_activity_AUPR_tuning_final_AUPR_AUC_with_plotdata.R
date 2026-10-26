@@ -1,3 +1,5 @@
+rega_separate_root <- Sys.getenv("REGA_SEPARATE_ROOT")
+if (!nzchar(rega_separate_root)) stop("Set REGA_SEPARATE_ROOT")
 # ============================================================
 # TF Expression vs TF Activity classification: ALL celltype-region pairs
 #
@@ -52,10 +54,10 @@ lambda_rule <- "lambda.min"
 #lambda_rule <- "lambda.1se"
 
 
-TF_root <- "/project/zduren/durenlab/naqing_palmetto/REGA_separate/07_tf/results/activity"
-metadata_dir <- "/project/zduren/durenlab/naqing_palmetto/REGA_separate/01_prepare/03metadata_by_group"
+TF_root <- file.path(rega_separate_root, "07_tf/results/activity")
+metadata_dir <- file.path(rega_separate_root, "01_prepare/data/metadata_by_group")
 
-output_dir <- "/project/zduren/durenlab/naqing_palmetto/REGA_separate/07_tf/figures"
+output_dir <- file.path(rega_separate_root, "07_tf/figures")
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 
 cat("Output directory:\n", output_dir, "\n\n")

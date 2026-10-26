@@ -1,14 +1,14 @@
 #!/bin/bash
 #SBATCH --job-name=wbv_gsea
-#SBATCH --output=logs/wbv_gsea_%A_%a.out
-#SBATCH --error=logs/wbv_gsea_%A_%a.err
+#SBATCH --output=%x_%A_%a.out
+#SBATCH --error=%x_%A_%a.err
 #SBATCH --time=12:00:00
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=100G
 #SBATCH --array=1-36
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REGA_SHARED_ROOT="${REGA_SHARED_ROOT:-$(dirname "${SCRIPT_DIR}")}"
-REGA_SEPARATE_ROOT="${REGA_SEPARATE_ROOT:-/project/zduren/durenlab/naqing_palmetto/REGA_separate}"
+REGA_SEPARATE_ROOT="${REGA_SEPARATE_ROOT:?Set REGA_SEPARATE_ROOT}"
 
 set -euo pipefail
 
@@ -16,7 +16,7 @@ set -euo pipefail
 # Paths
 # =========================
 BASE_DIR="${REGA_SHARED_ROOT}/part5_gsea"
-SCRIPT="${BASE_DIR}/11batch_gsea_from_wbv.py"
+SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/11batch_gsea_from_wbv.py"
 GMT="${BASE_DIR}/KEGG_2026.Human.gmt"
 
 WBV_ROOT="${REGA_SHARED_ROOT}/part3_process_REGA_output/09extracted_matrices_region_shareH"

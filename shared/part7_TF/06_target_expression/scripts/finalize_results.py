@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Combine completed pair-level EXP008 tables into review-friendly summaries."""
+"""Combine completed pair-level target-expression tables into review-friendly summaries."""
 from pathlib import Path
 import sys
 import pandas as pd

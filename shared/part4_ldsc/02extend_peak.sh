@@ -1,13 +1,13 @@
 #!/bin/bash
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REGA_SHARED_ROOT="${REGA_SHARED_ROOT:-$(dirname "${SCRIPT_DIR}")}"
-REGA_SEPARATE_ROOT="${REGA_SEPARATE_ROOT:-/project/zduren/durenlab/naqing_palmetto/REGA_separate}"
+REGA_SEPARATE_ROOT="${REGA_SEPARATE_ROOT:?Set REGA_SEPARATE_ROOT}"
 set -euo pipefail
 
 cd "${REGA_SHARED_ROOT}/part4_ldsc/"
 mkdir -p peaks_extended_2kb/temp
 
-BEDTOOLS="${BEDTOOLS:-/project/zduren/durenlab/software/bedtools2/bin/bedtools}"
+BEDTOOLS="${BEDTOOLS:?Set BEDTOOLS}"
 GENOME="${REGA_SEPARATE_ROOT}/04_ldsc/data/extended_peaks/hg19.autosomes.chrom.sizes"
 
 IN_DIR="${REGA_SHARED_ROOT}/part4_ldsc/module_peaks_hg19"

@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
-"""Preflight EXP008 pairs for the region-shared cross-celltype universe."""
+"""Preflight pairs for the region-shared target-expression analysis."""
 import csv
 from pathlib import Path
 
 import os
-SHARED_ROOT = Path(os.environ.get("REGA_SHARED_ROOT", Path(__file__).resolve().parents[3]))
-ADREGA = Path(os.environ.get("REGA_SEPARATE_ROOT", "/project/zduren/durenlab/naqing_palmetto/REGA_separate"))
+DATA_ROOT = Path(os.environ.get("REGA_DATA_ROOT", Path(__file__).resolve().parents[5].parent)).expanduser().resolve()
+SHARED_ROOT = Path(os.environ.get("REGA_SHARED_ROOT", DATA_ROOT / "REGA_shared")).expanduser().resolve()
 ADREGA_CROSS = SHARED_ROOT
 GRN_ROOT = SHARED_ROOT / "part7_TF/05GRN/results"
 GEX_ROOT = ADREGA_CROSS / "part1_prepare_REGA/02cleaned_region_consistent_gex"
-GENE_ASSIGNMENT_ROOT = ADREGA_CROSS / "part3_process_REGA_output/10-1gene_module_assignment_region_shareH_FC"
-TF_ASSIGNMENT_ROOT = ADREGA_CROSS / "part7_TF/02tf_assignment_FC"
+GENE_ASSIGNMENT_ROOT = ADREGA_CROSS / "part3_process_REGA_output/10-1gene_module_assignment_region_shareH_FC_no_Vasc"
+TF_ASSIGNMENT_ROOT = ADREGA_CROSS / "part7_TF/02tf_assignment"
 # Cross-celltype drivers must come from the region-wise TF activity analysis.
-DRIVER_FILE = ADREGA_CROSS / "part7_TF/04DriverTF_lm/all_celltype_region_TF_pathology_association.tsv"
-PATHOLOGY = Path(os.environ.get("INDIVIDUAL_PATHOLOGY_FILE", "/project/zduren/durenlab/naqing_palmetto/AD_Driver_TF/individual_pathology.tsv"))
-OUT = SHARED_ROOT / "part7_TF/06_target_expression/results/audit/cross_celltype_pairs.tsv"
+DRIVER_FILE = ADREGA_CROSS / "part7_TF/04TF_pathology/all_celltype_region_TF_pathology_association.tsv"
+DRIVER_ROOT = Path(os.environ.get("AD_DRIVER_TF_ROOT", DATA_ROOT / "AD_Driver_TF")).expanduser().resolve()
+PATHOLOGY = Path(os.environ.get("AD_PATHOLOGY_FILE", DRIVER_ROOT / "individual_pathology.tsv")).expanduser().resolve()
+RESULTS_ROOT = Path(os.environ.get("TF_TARGET_RESULTS_ROOT", Path(__file__).resolve().parents[1] / "results")).expanduser().resolve()
+OUT = RESULTS_ROOT / "audit/cross_celltype_pairs.tsv"
 
 
 def main():

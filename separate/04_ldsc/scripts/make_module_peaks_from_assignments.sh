@@ -1,7 +1,8 @@
 #!/bin/bash
+: "${REGA_SEPARATE_ROOT:?Set REGA_SEPARATE_ROOT}"
 set -euo pipefail
 
-base_dir="${REGA_ASSIGNMENTS_ROOT:-/project/zduren/durenlab/naqing_palmetto/REGA_separate/03_process_rega/module_assignments}"
+base_dir="${REGA_ASSIGNMENTS_ROOT:-${REGA_SEPARATE_ROOT}/03_process_rega/module_assignments}"
 
 for ct_dir in "${base_dir}"/*
 do

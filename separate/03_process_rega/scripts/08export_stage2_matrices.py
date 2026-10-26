@@ -7,7 +7,7 @@ import scipy.sparse
 # ============================================================
 # Paths
 # ============================================================
-BASE_DIR = "/project/zduren/durenlab/naqing_palmetto/REGA_separate/"
+BASE_DIR = (os.environ["REGA_SEPARATE_ROOT"] + '/')
 INPUT_DIR = os.environ.get("REGA_STAGE2_ROOT", os.path.join(BASE_DIR, "02_run_rega/rega_output"))
 CONTEXT_SIGNAL_PATH = "selected_context.txt"
 TF_binding_DIR = os.environ.get("REGA_INPUTS_ROOT", os.path.join(BASE_DIR, "01_prepare/data/rega_inputs"))

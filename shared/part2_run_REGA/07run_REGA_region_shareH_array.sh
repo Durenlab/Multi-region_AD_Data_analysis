@@ -5,11 +5,11 @@
 #SBATCH --gpus-per-node=h100:1
 #SBATCH --time=72:00:00
 #SBATCH --mem=600G
-#SBATCH --output=logs_rega/region_%A_%a.out
-#SBATCH --error=logs_rega/region_%A_%a.err
+#SBATCH --output=%x_%A_%a.out
+#SBATCH --error=%x_%A_%a.err
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REGA_SHARED_ROOT="${REGA_SHARED_ROOT:-$(dirname "${SCRIPT_DIR}")}"
-REGA_SEPARATE_ROOT="${REGA_SEPARATE_ROOT:-/project/zduren/durenlab/naqing_palmetto/REGA_separate}"
+REGA_SEPARATE_ROOT="${REGA_SEPARATE_ROOT:?Set REGA_SEPARATE_ROOT}"
 
 set -euo pipefail
 

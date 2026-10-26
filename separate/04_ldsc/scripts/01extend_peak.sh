@@ -1,11 +1,12 @@
 #!/bin/bash
+: "${REGA_SEPARATE_ROOT:?Set REGA_SEPARATE_ROOT}"
 set -euo pipefail
 
-BEDTOOLS="/project/zduren/durenlab/software/bedtools2/bin/bedtools"
-GENOME="/project/zduren/durenlab/naqing_palmetto/REGA_separate/04_ldsc/data/extended_peaks/hg19.autosomes.chrom.sizes"
+BEDTOOLS="${BEDTOOLS:?Set BEDTOOLS}"
+GENOME="${REGA_SEPARATE_ROOT}/04_ldsc/data/extended_peaks/hg19.autosomes.chrom.sizes"
 
-IN_DIR="${REGA_LDSC_HG19_ROOT:-/project/zduren/durenlab/naqing_palmetto/REGA_separate/04_ldsc/data/module_peaks_hg19}"
-OUT_DIR="${REGA_LDSC_EXTENDED_ROOT:-/project/zduren/durenlab/naqing_palmetto/REGA_separate/04_ldsc/data/extended_peaks/extend_bed}"
+IN_DIR="${REGA_LDSC_HG19_ROOT:-${REGA_SEPARATE_ROOT}/04_ldsc/data/module_peaks_hg19}"
+OUT_DIR="${REGA_LDSC_EXTENDED_ROOT:-${REGA_SEPARATE_ROOT}/04_ldsc/data/extended_peaks/extend_bed}"
 TMP_DIR="${OUT_DIR}/temp"
 mkdir -p "$TMP_DIR"
 if compgen -G "${OUT_DIR}/*.bed" > /dev/null; then

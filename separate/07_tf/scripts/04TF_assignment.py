@@ -7,11 +7,11 @@ CELLTYPES = ["Ast", "Exc", "OPC", "Oli", "Inh", "Mic_Immune"]
 
 BASE_DIR = os.environ.get(
     "REGA_TF_BY_MODULE_ROOT",
-    "/project/zduren/durenlab/naqing_palmetto/REGA_separate/07_tf/results/tf_by_module",
+    (os.environ["REGA_SEPARATE_ROOT"] + '/07_tf/results/tf_by_module'),
 )
 OUT_DIR = os.environ.get(
     "REGA_TF_ASSIGNMENT_ROOT",
-    "/project/zduren/durenlab/naqing_palmetto/REGA_separate/07_tf/results/tf_assignment",
+    (os.environ["REGA_SEPARATE_ROOT"] + '/07_tf/results/tf_assignment'),
 )
 os.makedirs(OUT_DIR, exist_ok=True)
 

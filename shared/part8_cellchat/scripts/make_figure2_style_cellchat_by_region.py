@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Create a Figure 2-style CellChat summary separately for each region."""
 from pathlib import Path
+import os
 import textwrap
 
 import matplotlib
@@ -13,7 +14,7 @@ import numpy as np
 import pandas as pd
 
 
-BASE = Path(__file__).resolve().parents[1]
+BASE = Path(os.environ["CELLCHAT_WORK_DIR"])
 TABLES = BASE / "finalized/tables"
 FIGURES = BASE / "finalized/figures"
 REGIONS = ["AG", "EC", "HC", "MTC", "PFC", "TH"]
@@ -162,7 +163,7 @@ def plot_region_panels_ab(all_results, region):
     fig.suptitle(f"{region}: significant donor-level CellChat features", fontsize=14, weight="bold", y=.98)
     fig.text(.5, .92,
              "Simple donor-level OLS (nonAD=0, earlyAD=1, lateAD=2; HC3 SE); pair-specific BH FDR < 0.05. "
-             "Vasc excluded.", ha="center", fontsize=8)
+             "Six nonvascular cell classes.", ha="center", fontsize=8)
     fig.text(.5, .025,
              "A: edge width/labels count significant interaction features; edge color identifies sender. "
              "B: identical cell-type order on sender and receiver axes aligns matching types diagonally. "
@@ -227,7 +228,7 @@ def plot_all_region_trends(all_results):
     fig.text(.5, .012,
              "Top 10 tested interaction × sender/receiver features per region, ranked by the product of "
              "within-region percentile ranks for −log10(p) and |slope|. All bars are gray; direction retains the signed slope. "
-             "Whiskers show 95% HC3 confidence intervals; FDR is BH within region × sender/receiver pair. Vasc excluded.",
+             "Whiskers show 95% HC3 confidence intervals; FDR is BH within region × sender/receiver pair.",
              ha="center", va="bottom", fontsize=11.2, wrap=True)
     for fmt, kwargs in [("pdf", {}), ("png", {"dpi": 300})]:
         fig.savefig(FIGURES / f"figure2_style_all_regions_panel_C.{fmt}", bbox_inches="tight", **kwargs)
@@ -249,12 +250,13 @@ def main():
     summary["n_displayed_panel_c"] = 10
     summary.to_csv(TABLES / "figure2_style_region_summary.tsv", sep="\t", index=False)
     legend_path = BASE / "finalized/methods/figure_legends.md"
-    legend = legend_path.read_text()
+    legend_path.parent.mkdir(parents=True, exist_ok=True)
+    legend = legend_path.read_text() if legend_path.exists() else ""
     marker = "**Regional Figure 2-style CellChat panels.**"
     if marker in legend:
         legend = legend[:legend.index(marker)].rstrip()
     legend += ("\n\n**Regional Figure 2-style CellChat panels.** Panels A and B are saved separately for each region. "
-               "Panel A displays all pair-specific FDR-significant directed paths after excluding Vasc; edge color "
+               "Panel A displays all pair-specific FDR-significant directed paths among six nonvascular classes; edge color "
                "identifies sender and edge width/labels count significant interaction features. Panel B counts the "
                "same features in a sender-by-receiver matrix with the same six-cell-type order on both axes, so "
                "matching cell types lie on the diagonal. One combined 15-inch-wide Panel C, titled ‘Donor-level "
@@ -263,7 +265,7 @@ def main():
                "tested features. Bars are gray, extend according to signed slope, and are half the prior thickness; "
                "font sizes are doubled. Nominal p-values and pair-specific BH FDR values are printed for each row; "
                "whiskers show 95% HC3 confidence intervals. Donors are the replicates; pathology is coded "
-               "nonAD=0, earlyAD=1, lateAD=2. Vasc is excluded.\n")
+               "nonAD=0, earlyAD=1, lateAD=2.\n")
     legend_path.write_text(legend)
     print("Wrote regional A/B panels and combined all-region panel C")
     print(summary.to_string(index=False))

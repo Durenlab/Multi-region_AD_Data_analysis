@@ -29,7 +29,8 @@
 file_arg <- grep("^--file=", commandArgs(FALSE), value = TRUE)
 script_dir <- if (length(file_arg)) dirname(normalizePath(sub("^--file=", "", file_arg[1]))) else getwd()
 shared_root <- Sys.getenv("REGA_SHARED_ROOT", unset = normalizePath(file.path(script_dir, "../..")))
-separate_root <- Sys.getenv("REGA_SEPARATE_ROOT", unset = "/project/zduren/durenlab/naqing_palmetto/REGA_separate")
+separate_root <- Sys.getenv("REGA_SEPARATE_ROOT")
+if (!nzchar(separate_root)) stop("Set REGA_SEPARATE_ROOT")
 
 suppressPackageStartupMessages({
   library(Matrix)

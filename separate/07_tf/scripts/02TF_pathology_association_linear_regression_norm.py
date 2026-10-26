@@ -14,7 +14,7 @@ from statsmodels.stats.multitest import multipletests
 # Paths
 # ============================================================
 
-BASE_DIR = "/project/zduren/durenlab/naqing_palmetto/REGA_separate"
+BASE_DIR = (os.environ["REGA_SEPARATE_ROOT"] + '')
 
 TF_ACTIVITY_ROOT = os.environ.get(
     "REGA_TF_ACTIVITY_ROOT", os.path.join(BASE_DIR, "07_tf/results/activity")

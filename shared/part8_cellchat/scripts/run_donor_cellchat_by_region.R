@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 # Compute donor-level CellChat probabilities for a fixed, pathology-blind
-# candidate interaction set from the existing all-donor regional CellChat run.
+# candidate interaction set defined in the seven-class regional input.
 # The donor is the unit of replication in downstream pathology comparisons.
 
 suppressPackageStartupMessages({
@@ -20,14 +20,14 @@ args <- commandArgs(trailingOnly = TRUE)
 if (length(args) < 4L || length(args) > 6L) {
   stop(paste(
     "Usage: run_donor_cellchat_by_region.R",
-    "<REGION> <REGION_H5AD> <ALL_DONOR_CELLCHAT_RDS> <OUTPUT_ROOT>",
+    "<REGION> <REGION_H5AD> <CANDIDATE_LR_RDS> <OUTPUT_ROOT>",
     "[MIN_CELLS=20] [NBOOT=100]"
   ))
 }
 
 region <- args[[1]]
 input_h5ad <- normalizePath(args[[2]], mustWork = TRUE)
-pooled_rds <- normalizePath(args[[3]], mustWork = TRUE)
+candidate_rds <- normalizePath(args[[3]], mustWork = TRUE)
 output_root <- args[[4]]
 min_cells <- if (length(args) >= 5L) as.integer(args[[5]]) else 20L
 nboot <- if (length(args) >= 6L) as.integer(args[[6]]) else 100L
@@ -93,9 +93,14 @@ if (anyDuplicated(donor_pathology$donor_id)) {
 }
 
 cat("Loading pathology-blind interaction universe...\n")
-pooled <- readRDS(pooled_rds)
-if (!inherits(pooled, "CellChat")) stop("Pooled input is not a CellChat object")
-lr_use <- pooled@LR$LRsig
+candidate_prior <- readRDS(candidate_rds)
+if (!is.list(candidate_prior) || is.null(candidate_prior$LRsig) ||
+    is.null(candidate_prior$DB)) stop("Invalid candidate LR input")
+if (!identical(candidate_prior$region, region) ||
+    !identical(candidate_prior$celltypes, celltype_order)) {
+  stop("Candidate LR region or cell classes do not match the donor input")
+}
+lr_use <- candidate_prior$LRsig
 if (is.null(lr_use) || nrow(lr_use) == 0L) stop("No regional candidate interactions found")
 if (is.null(rownames(lr_use)) || anyDuplicated(rownames(lr_use))) {
   stop("Candidate interaction row names must be unique")
@@ -106,8 +111,8 @@ candidate <- data.frame(
   check.names = FALSE,
   stringsAsFactors = FALSE
 )
-db_use <- pooled@DB
-rm(pooled)
+db_use <- candidate_prior$DB
+rm(candidate_prior)
 gc()
 
 workers <- suppressWarnings(as.integer(Sys.getenv("SLURM_CPUS_PER_TASK", "1")))
@@ -178,7 +183,7 @@ for (donor_index in seq_along(donor_ids)) {
     cellchat <- subsetData(cellchat)
 
     # Use one common interaction set for every donor in this region. This set
-    # comes from the all-donor regional analysis, not pathology-specific objects.
+    # comes from a pathology-blind regional screen, not pathology groups.
     set.seed(seed)
     cellchat <- computeCommunProb(
       cellchat,

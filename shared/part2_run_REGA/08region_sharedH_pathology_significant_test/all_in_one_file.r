@@ -6,7 +6,8 @@ if (!nzchar(shared_root)) {
   while (!(basename(shared_root) %in% c("REGA_shared", "shared")) && dirname(shared_root) != shared_root) shared_root <- dirname(shared_root)
   if (!(basename(shared_root) %in% c("REGA_shared", "shared"))) stop("Could not find shared analysis root")
 }
-separate_root <- Sys.getenv("REGA_SEPARATE_ROOT", "/project/zduren/durenlab/naqing_palmetto/REGA_separate")
+separate_root <- Sys.getenv("REGA_SEPARATE_ROOT")
+if (!nzchar(separate_root)) stop("Set REGA_SEPARATE_ROOT")
 library(data.table)
 
 # ============================================================

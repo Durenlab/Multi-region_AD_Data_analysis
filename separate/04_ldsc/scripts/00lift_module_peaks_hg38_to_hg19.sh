@@ -1,12 +1,13 @@
 #!/bin/bash
+: "${REGA_SEPARATE_ROOT:?Set REGA_SEPARATE_ROOT}"
 set -euo pipefail
 
 # Activate conda env
 source activate crossmap_env
-base_dir="/project/zduren/durenlab/naqing_palmetto/REGA_separate/"
+base_dir="${REGA_SEPARATE_ROOT}/"
 list_file="${REGA_LDSC_CONTEXT_FILE:-${base_dir}/04_ldsc/inputs/selected_context.txt}"
 
-chain_file="/project/zduren/durenlab/palmetto/cham/util_data/position_mapping_hg/hg38ToHg19.over.chain.gz"
+chain_file="${LDSC_CHAIN_FILE:?Set LDSC_CHAIN_FILE}"
 
 assignment_dir="${REGA_ASSIGNMENTS_ROOT:-${base_dir}/03_process_rega/module_assignments}"
 out_dir="${REGA_LDSC_HG19_ROOT:-${base_dir}/04_ldsc/data/module_peaks_hg19}"

@@ -1,4 +1,6 @@
 #!/usr/bin/env Rscript
+rega_separate_root <- Sys.getenv("REGA_SEPARATE_ROOT")
+if (!nzchar(rega_separate_root)) stop("Set REGA_SEPARATE_ROOT")
 
 # ============================================================
 # OVERALL TF Expression vs TF Activity classifier
@@ -68,16 +70,16 @@ n_perm <- 10000
 
 TF_root <- Sys.getenv(
   "REGA_TF_ACTIVITY_ROOT",
-  unset = "/project/zduren/durenlab/naqing_palmetto/REGA_separate/07_tf/results/activity"
+  unset = file.path(rega_separate_root, "07_tf/results/activity")
 )
 metadata_dir <- Sys.getenv(
   "REGA_TF_METADATA_DIR",
-  unset = "/project/zduren/durenlab/naqing_palmetto/REGA_separate/01_prepare/data/metadata_by_group"
+  unset = file.path(rega_separate_root, "01_prepare/data/metadata_by_group")
 )
 
 output_dir <- Sys.getenv(
   "REGA_TF_COMPARISON_OUTPUT_DIR",
-  unset = "/project/zduren/durenlab/naqing_palmetto/REGA_separate/07_tf/results/classification_overall"
+  unset = file.path(rega_separate_root, "07_tf/results/classification_overall")
 )
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 

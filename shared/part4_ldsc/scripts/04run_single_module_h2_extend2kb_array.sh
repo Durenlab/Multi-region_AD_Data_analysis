@@ -1,7 +1,7 @@
 #!/bin/bash
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REGA_SHARED_ROOT="${REGA_SHARED_ROOT:-$(dirname "$(dirname "${SCRIPT_DIR}")")}"
-REGA_SEPARATE_ROOT="${REGA_SEPARATE_ROOT:-/project/zduren/durenlab/naqing_palmetto/REGA_separate}"
+REGA_SEPARATE_ROOT="${REGA_SEPARATE_ROOT:?Set REGA_SEPARATE_ROOT}"
 set -euo pipefail
 
 ldsc_dir="${REGA_SHARED_ROOT}/part4_ldsc/"
@@ -34,8 +34,8 @@ echo "Celltype-region: ${ct}"
 echo "Module: ${module}"
 echo "=================================================="
 
-Phase3_dir="${LDSC_PHASE3_DIR:-/project/zduren/durenlab/palmetto/cham/GWAS/1000G_Phase3}"
-ldsc_path="${LDSC_CODE_DIR:-/project/zduren/durenlab/palmetto/cham/GWAS/ldsc}"
+Phase3_dir="${LDSC_PHASE3_DIR:?Set LDSC_PHASE3_DIR}"
+ldsc_path="${LDSC_CODE_DIR:?Set LDSC_CODE_DIR}"
 
 GWAS_SUMSTATS="${REGA_SEPARATE_ROOT}/external_inputs/AD_Bellenguez.sumstats.gz"
 

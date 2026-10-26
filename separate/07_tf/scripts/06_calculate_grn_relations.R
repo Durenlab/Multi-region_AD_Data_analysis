@@ -1,4 +1,6 @@
 #!/usr/bin/env Rscript
+rega_separate_root <- Sys.getenv("REGA_SEPARATE_ROOT")
+if (!nzchar(rega_separate_root)) stop("Set REGA_SEPARATE_ROOT")
 
 # Workflow
 # Input:
@@ -23,7 +25,7 @@
 # Example:
 #   Rscript 06_calculate_grn_relations.R \
 #     --celltype_region Exc_AG \
-#     --base_dir /project/zduren/durenlab/naqing_palmetto/REGA_separate
+#     --base_dir "$REGA_SEPARATE_ROOT"
 
 suppressPackageStartupMessages({
   library(Matrix)
@@ -42,7 +44,7 @@ parse_args <- function() {
 
   result <- list(
     celltype_region = NULL,
-    base_dir = Sys.getenv("REGA_SEPARATE_CURATED_ROOT", unset = "/project/zduren/durenlab/naqing_palmetto/REGA_separate"),
+    base_dir = Sys.getenv("REGA_SEPARATE_CURATED_ROOT", unset = file.path(rega_separate_root, "")),
     output_dir = NULL,
     edge_chunk_size = 100000L,
     overwrite = FALSE
@@ -276,7 +278,7 @@ bv_file <- file.path(extracted_dir, paste0(celltype_region, "_BV_RE_by_module.ts
 v_file <- file.path(extracted_dir, paste0(celltype_region, "_V_TF_by_module.tsv"))
 w_file <- file.path(extracted_dir, paste0(celltype_region, "_W_binary_sparse.tsv"))
 b_file <- file.path(extracted_dir, paste0(celltype_region, "_B_binary_sparse.tsv"))
-motif_tf_file <- file.path(Sys.getenv("REGA_SEPARATE_ROOT", unset = "/project/zduren/durenlab/naqing_palmetto/REGA_separate"), "external_inputs", "motif_to_TF.txt")
+motif_tf_file <- file.path(Sys.getenv("REGA_SEPARATE_ROOT", unset = file.path(rega_separate_root, "")), "external_inputs", "motif_to_TF.txt")
 pcc_file <- file.path(
   base_dir, "07_tf", "results", "activity",
   paste0(celltype_region, "_TF_motif_pcc_M2.csv")

@@ -5,10 +5,12 @@
 #SBATCH --time=24:00:00
 #SBATCH --mem=500G
 #SBATCH --array=0-35
-#SBATCH --output=logs_rega/%A_%a.out
-#SBATCH --error=logs_rega/%A_%a.err
+#SBATCH --output=%x_%A_%a.out
+#SBATCH --error=%x_%A_%a.err
+: "${REGA_SEPARATE_ROOT:?Set REGA_SEPARATE_ROOT}"
 
 set -euo pipefail
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 ml anaconda3
 
@@ -26,4 +28,4 @@ REGION=${regions[$rg_index]}
 
 echo "Running job ${SLURM_ARRAY_TASK_ID}: ${REGION} - ${CELLTYPE}"
 
-python /project/zduren/durenlab/naqing_palmetto/REGA_separate/02_run_rega/scripts/07REGA_full_gpu_run_array_save_mem_version.py --region ${REGION} --celltype ${CELLTYPE}
+python "${SCRIPT_DIR}/07REGA_full_gpu_run_array_save_mem_version.py" --region "${REGION}" --celltype "${CELLTYPE}"

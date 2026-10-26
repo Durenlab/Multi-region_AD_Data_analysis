@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 
 from pathlib import Path
 import argparse
@@ -51,7 +52,7 @@ SIGNIFICANCE_CUTOFF = ARGS.cutoff
 # User settings
 # ============================================================
 BASE_DIR = Path(
-    "/project/zduren/durenlab/naqing_palmetto/REGA_separate"
+    (os.environ["REGA_SEPARATE_ROOT"] + '')
 )
 
 ASSOC_FILE = (

@@ -1,23 +1,24 @@
 #!/bin/bash
 #SBATCH --job-name=wbv_gsea
-#SBATCH --output=logs/wbv_gsea_%A_%a.out
-#SBATCH --error=logs/wbv_gsea_%A_%a.err
+#SBATCH --output=%x_%A_%a.out
+#SBATCH --error=%x_%A_%a.err
 #SBATCH --time=12:00:00
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=100G
 #SBATCH --array=1-18
+: "${REGA_SEPARATE_ROOT:?Set REGA_SEPARATE_ROOT}"
 
 set -euo pipefail
 
 # =========================
 # Paths
 # =========================
-BASE_DIR="/project/zduren/durenlab/naqing_palmetto/REGA_separate/05_gsea/"
-SCRIPT="${BASE_DIR}/scripts/10batch_gsea_from_wbv.py"
+BASE_DIR="${REGA_SEPARATE_ROOT}/05_gsea/"
+SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/10batch_gsea_from_wbv.py"
 LIST_FILE="${BASE_DIR}/inputs/selected_context.txt"
 GMT="${BASE_DIR}/data/GO_Biological_Process_2026_Human.gmt"
 
-WBV_ROOT="/project/zduren/durenlab/naqing_palmetto/REGA_separate/03_process_rega/matrices"
+WBV_ROOT="${REGA_SEPARATE_ROOT}/03_process_rega/matrices"
 OUT_ROOT="${BASE_DIR}/results/go_bp"
 
 # =========================

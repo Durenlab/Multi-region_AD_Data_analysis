@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #SBATCH --job-name=aging_gsea
-#SBATCH --output=logs/aging_gsea_%A_%a.out
-#SBATCH --error=logs/aging_gsea_%A_%a.err
+#SBATCH --output=%x_%A_%a.out
+#SBATCH --error=%x_%A_%a.err
 #SBATCH --time=12:00:00
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=50G

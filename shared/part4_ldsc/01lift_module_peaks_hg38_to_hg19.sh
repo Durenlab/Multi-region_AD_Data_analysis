@@ -1,7 +1,7 @@
 #!/bin/bash
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REGA_SHARED_ROOT="${REGA_SHARED_ROOT:-$(dirname "${SCRIPT_DIR}")}"
-REGA_SEPARATE_ROOT="${REGA_SEPARATE_ROOT:-/project/zduren/durenlab/naqing_palmetto/REGA_separate}"
+REGA_SEPARATE_ROOT="${REGA_SEPARATE_ROOT:?Set REGA_SEPARATE_ROOT}"
 set -euo pipefail
 
 # Activate conda env
@@ -10,7 +10,7 @@ source activate crossmap_env
 
 base_dir="${REGA_SHARED_ROOT}"
 
-chain_file="${LDSC_CHAIN_FILE:-/project/zduren/durenlab/palmetto/cham/util_data/position_mapping_hg/hg38ToHg19.over.chain.gz}"
+chain_file="${LDSC_CHAIN_FILE:?Set LDSC_CHAIN_FILE}"
 
 input_root="${base_dir}/part4_ldsc/module_peaks_hg38"
 

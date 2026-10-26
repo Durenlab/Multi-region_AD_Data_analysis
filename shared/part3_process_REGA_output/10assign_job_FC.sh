@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=assignnV
-#SBATCH --output=logs/assignRE_%j_nV.out
-#SBATCH --error=logs/assignRE_%j_nV.err
+#SBATCH --output=%x_%j.out
+#SBATCH --error=%x_%j.err
 #SBATCH --time=72:00:00
 #SBATCH --mem=600G
 #SBATCH --cpus-per-task=4

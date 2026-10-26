@@ -1,7 +1,8 @@
 #!/bin/bash
+: "${REGA_SEPARATE_ROOT:?Set REGA_SEPARATE_ROOT}"
 set -euo pipefail
 
-ldsc_dir="/project/zduren/durenlab/naqing_palmetto/REGA_separate/04_ldsc/"
+ldsc_dir="${REGA_SEPARATE_ROOT}/04_ldsc/"
 ctm_file="${REGA_LDSC_MODULE_FILE:-${ldsc_dir}/inputs/selected_modules.txt}"
 
 task_id="${SLURM_ARRAY_TASK_ID}"
@@ -35,8 +36,8 @@ echo "Celltype-region: ${ct}"
 echo "Module: ${module}"
 echo "=================================================="
 
-Phase3_dir="/project/zduren/durenlab/palmetto/cham/GWAS/1000G_Phase3"
-ldsc_path="/project/zduren/durenlab/palmetto/cham/GWAS/ldsc"
+Phase3_dir="${LDSC_PHASE3_DIR:?Set LDSC_PHASE3_DIR}"
+ldsc_path="${LDSC_CODE_DIR:?Set LDSC_CODE_DIR}"
 
 GWAS_SUMSTATS="${REGA_LDSC_GWAS_SUMSTATS:-${ldsc_dir}/data/gwas/AD_Bellenguez.sumstats.gz}"
 

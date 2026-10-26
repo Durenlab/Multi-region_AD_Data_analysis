@@ -12,8 +12,8 @@ peak_bed=$2
 out_dir=$3
 annot_name=$4
 
-bim_dir="${LDSC_BIM_DIR:-/project/zduren/durenlab/palmetto/cham/GWAS/1000G_Phase3/1000G_EUR_Phase3_plink}"
-BEDTOOLS="${BEDTOOLS:-/project/zduren/durenlab/software/bedtools2/bin/bedtools}"
+bim_dir="${LDSC_BIM_DIR:?Set LDSC_BIM_DIR}"
+BEDTOOLS="${BEDTOOLS:?Set BEDTOOLS}"
 
 mkdir -p "${out_dir}" "${out_dir}/tmp"
 

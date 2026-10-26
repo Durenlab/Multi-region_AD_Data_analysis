@@ -2,7 +2,7 @@ import os
 import pandas as pd
 
 # input file
-path = "/project/zduren/durenlab/naqing_palmetto/REGA_separate/07_tf/data/Motif_TF_name_correspondance_uppercase.txt"
+path = (os.environ["REGA_SEPARATE_ROOT"] + '/07_tf/data/Motif_TF_name_correspondance_uppercase.txt')
 
 # read two columns: motif, TF
 df = pd.read_csv(path, sep=r"\s+", header=None, names=["motif", "TF"])
@@ -14,7 +14,7 @@ mat = (mat > 0).astype(int)
 # save
 motif_tf_file = os.environ.get(
     "REGA_MOTIF_TF_MATRIX",
-    "/project/zduren/durenlab/naqing_palmetto/REGA_separate/07_tf/data/motif_by_TF_matrix.tsv",
+    (os.environ["REGA_SEPARATE_ROOT"] + '/07_tf/data/motif_by_TF_matrix.tsv'),
 )
 os.makedirs(os.path.dirname(motif_tf_file), exist_ok=True)
 mat.to_csv(motif_tf_file, sep="\t")
@@ -27,12 +27,12 @@ CELLTYPES = ["Ast", "Exc", "OPC", "Oli", "Inh", "Mic_Immune"]
 
 base_dir = os.environ.get(
     "REGA_MATRICES_ROOT",
-    "/project/zduren/durenlab/naqing_palmetto/REGA_separate/03_process_rega/matrices",
+    (os.environ["REGA_SEPARATE_ROOT"] + '/03_process_rega/matrices'),
 )
 # motif x TF matrix was written above (or selected through REGA_MOTIF_TF_MATRIX)
 out_dir = os.environ.get(
     "REGA_TF_BY_MODULE_ROOT",
-    "/project/zduren/durenlab/naqing_palmetto/REGA_separate/07_tf/results/tf_by_module",
+    (os.environ["REGA_SEPARATE_ROOT"] + '/07_tf/results/tf_by_module'),
 )
 os.makedirs(out_dir, exist_ok=True)
 

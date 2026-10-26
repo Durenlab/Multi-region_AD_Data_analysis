@@ -19,12 +19,12 @@ parser.add_argument("--region", type=str, required=True)
 parser.add_argument("--celltype", type=str, required=True)
 parser.add_argument(
     "--input-root", type=str,
-    default="/project/zduren/durenlab/naqing_palmetto/REGA_separate/01_prepare/data/rega_inputs",
+    default=(os.environ["REGA_SEPARATE_ROOT"] + '/01_prepare/data/rega_inputs'),
     help="Directory containing REGION/CELLTYPE REGA input files",
 )
 parser.add_argument(
     "--output-root", type=str,
-    default="/project/zduren/durenlab/naqing_palmetto/REGA_separate/02_run_rega/rega_output",
+    default=(os.environ["REGA_SEPARATE_ROOT"] + '/02_run_rega/rega_output'),
     help="Directory for REGION/CELLTYPE stage1.mat and stage2.mat",
 )
 args = parser.parse_args()

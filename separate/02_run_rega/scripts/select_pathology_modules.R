@@ -1,9 +1,11 @@
 #!/usr/bin/env Rscript
+rega_separate_root <- Sys.getenv("REGA_SEPARATE_ROOT")
+if (!nzchar(rega_separate_root)) stop("Set REGA_SEPARATE_ROOT")
 suppressPackageStartupMessages({ library(readr); library(dplyr) })
 
 base_dir <- Sys.getenv(
   "REGA_PATHOLOGY_ROOT",
-  unset = "/project/zduren/durenlab/naqing_palmetto/REGA_separate/02_run_rega/pathology_association"
+  unset = file.path(rega_separate_root, "02_run_rega/pathology_association")
 )
 input_file <- file.path(base_dir, "results", "All_four_tests_H_pathology_results.tsv")
 if (!file.exists(input_file)) {
